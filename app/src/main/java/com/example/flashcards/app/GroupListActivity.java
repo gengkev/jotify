@@ -29,6 +29,8 @@ import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 
 public class GroupListActivity extends Activity{
+    public static final String EXTRA_ID = "com.example.flashcards.app.ID";
+
     ListView listView ;
     List<Category> categories;
 
@@ -60,6 +62,17 @@ public class GroupListActivity extends Activity{
 
         ListAdapter myListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titles);
         listView.setAdapter(myListAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                Category c = categories.get(pos);
+
+                Intent intent = new Intent(GroupListActivity.this, GroupActivity.class);
+                intent.putExtra(EXTRA_ID, c._id);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

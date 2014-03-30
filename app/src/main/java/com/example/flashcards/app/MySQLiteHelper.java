@@ -48,7 +48,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
     private static final String[] NOTECARD_COLUMNS = {"_id","path","category_id","caption"};
     private static final String[] CATEGORY_COLUMNS = {"_id", "title"};
 
-    public List<Notecard> getNotecards(Context context){
+    public List<Notecard> getNotecards(Context context, int category){
 
         // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
@@ -57,8 +57,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         Cursor cursor =
                 db.query("notecard", // a. table
                         null, // b. column names
-                        null, // c. selections
-                        null, // d. selections args
+                        "_id=?", // c. selections
+                        new String[] { String.valueOf(category) }, // d. selections args
                         null, // e. group by
                         null, // f. having
                         null, // g. order by
@@ -124,6 +124,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         return categories;
 
         // return "Hello";
+    }
+
+    public Category getCategory(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query("category", null, "_id=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Category c = new Category();
+        c._id = cursor.getInt(0);
+        c.title = cursor.getString(1);
+
+        return c;
     }
 
     public long addNotecard(Notecard notecard) {

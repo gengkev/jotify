@@ -1,16 +1,30 @@
 package com.example.flashcards.app;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class AddNotecardActivity extends ActionBarActivity {
+    public static final String NOTECARD_ID = "com.example.flashcards.app.NOTECARD_ID";
+
+    private MySQLiteHelper db;
+    private Category cParent;
+    private Notecard notecard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_notecard);
+
+        Intent intent = getIntent();
+        int id = intent.getIntExtra(GroupActivity.EXTRA_GROUP_ID, -1);
+
+        db = new MySQLiteHelper(this);
+        cParent = db.getCategory(id);
+
+
     }
 
 
@@ -33,6 +47,16 @@ public class AddNotecardActivity extends ActionBarActivity {
                 return true;
             case R.id.add_notecard_done:
                 // TODO save notecard
+
+                db.addNotecard(notecard);
+
+                // TODO: implement TestingActivity
+                /*
+                Intent intent = new Intent(this, TestingActivity.class);
+                intent.putExtra(NOTECARD_ID, notecard._id);
+                startActivity(intent);
+                */
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

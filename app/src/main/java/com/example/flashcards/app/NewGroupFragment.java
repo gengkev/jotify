@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.EditText;
 
 public class NewGroupFragment extends DialogFragment {
-    public static final String EXTRA_ID = "com.example.flashcards.app.ID";
-
     private EditText text;
 
     @Override
@@ -42,7 +40,7 @@ public class NewGroupFragment extends DialogFragment {
                 Log.i(NewGroupFragment.class.getName(), "new category: " + c);
 
                 Intent intent = new Intent(getActivity(), GroupActivity.class);
-                intent.putExtra(EXTRA_ID, c._id);
+                intent.putExtra(GroupListActivity.EXTRA_ID, c._id);
                 startActivity(intent);
             }
         });

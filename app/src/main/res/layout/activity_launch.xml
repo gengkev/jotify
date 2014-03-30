@@ -17,7 +17,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:onClick="launchApp" />
+        android:onClick="launchApp"
+        android:color="@android:color/holo_blue_light" />
 
     <ImageView
         android:layout_width="wrap_content"

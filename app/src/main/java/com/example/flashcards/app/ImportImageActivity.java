@@ -2,9 +2,8 @@ package com.example.flashcards.app;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,7 +26,7 @@ public class ImportImageActivity extends ActionBarActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int PICK_IMAGE = 2;
 
-    String mCurrentPhotoPath;
+    Uri mCurrentPhotoPath;
     ImageView mImageView;
 
     @Override
@@ -44,7 +43,7 @@ public class ImportImageActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                takePictureIntent.setType("image/jpeg");
+                // takePictureIntent.setType("image/jpeg");
                 // Ensure that the intent can be handled
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     // get reference to file
@@ -63,13 +62,13 @@ public class ImportImageActivity extends ActionBarActivity {
                 }
             }
         });
-/*
+
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
+                intent.setType("image/jpeg");
 
                 String title = getResources().getString(R.string.chooser_title);
                 Intent chooser = Intent.createChooser(intent, title);
@@ -79,7 +78,7 @@ public class ImportImageActivity extends ActionBarActivity {
                 }
             }
         });
-*/
+
 
     }
 
@@ -87,57 +86,38 @@ public class ImportImageActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             galleryAddPic();
-
-            Log.i(ImportImageActivity.class.toString(), "data.getData(): " + data.getData());
-
-            Log.i(ImportImageActivity.class.toString(), "Photo path: " + mCurrentPhotoPath);
+            //Log.i(ImportImageActivity.class.getName(), "mime type: " + data.getType());
+            //Log.i(ImportImageActivity.class.getName(), "data.getData(): " + data.getData());
+            Log.i(ImportImageActivity.class.getName(), "Photo path: " + mCurrentPhotoPath);
             // TODO: save mCurrentPhotoPath
 
             previewImage();
         }
-        /*
+
         else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
-            mCurrentPhotoPath = getPath(data.getData());
+            mCurrentPhotoPath = data.getData(); // a content:// thingy
 
-            data.getExtras().
             Log.i(ImportImageActivity.class.toString(), "Photo path: " + mCurrentPhotoPath);
             // TODO: save mCurrentPhotoPath
 
             previewImage();
         }
-        */
+
     }
-/*
-    public String getPath(Uri uri) {
-        // just some safety built in
-        if( uri == null ) {
-            // TODO perform some logging or show user feedback
-            return null;
-        }
-        // try to retrieve the image from the media store first
-        // this will only work for images selected from gallery
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        if( cursor != null ){
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        }
-        // this is our fallback here
-        return uri.getPath();
-    }
-*/
+
     private void previewImage() {
-        Uri selectedImage = Uri.parse(mCurrentPhotoPath);
-        getContentResolver().notifyChange(selectedImage, null);
+        Uri selectedImage = mCurrentPhotoPath;
         ContentResolver cr = getContentResolver();
+        cr.notifyChange(selectedImage, null);
         Bitmap bitmap;
         try {
             bitmap = android.provider.MediaStore.Images.Media
                     .getBitmap(cr, selectedImage);
 
-            mImageView.setImageBitmap(bitmap);
+            int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+            Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+            mImageView.setImageBitmap(scaled);
+
             Toast.makeText(this, selectedImage.toString(),
                     Toast.LENGTH_LONG).show();
         } catch (Exception e) {
@@ -175,13 +155,13 @@ public class ImportImageActivity extends ActionBarActivity {
         File image = new File(storageDir, imageFileName + ".jpg");
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
+        mCurrentPhotoPath = Uri.fromFile(image);
         return image;
     }
 
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(mCurrentPhotoPath);
+        File f = new File("file:" + mCurrentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);

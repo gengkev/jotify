@@ -11,6 +11,7 @@
     <string name="done">Done</string>
     <string name="name">Name</string>
     <string name="create">Create</string>
+    <string name="add_notecard">Add notecard</string>
     <string name="notecard_name">Notecard name</string>
     <string name="title_activity_group_list">Groups</string>
     <string name="title_activity_import_image">Import Image</string>
