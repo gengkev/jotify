@@ -8,6 +8,10 @@
         android:title="@string/add_group"
         android:showAsAction="ifRoom" />
 
+    <item android:id="@+id/addphoto"
+        android:title="Add photo (TESTING)"
+        android:showAsAction="never" />
+
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"

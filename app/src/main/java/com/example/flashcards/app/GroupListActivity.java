@@ -1,6 +1,9 @@
 package com.example.flashcards.app;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.support.v7.app.ActionBar;
-public class GroupListActivity extends Activity {
+
+public class GroupListActivity extends Activity{
     ListView listView ;
 
     @Override
@@ -52,7 +56,7 @@ public class GroupListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
+/*
                 // ListView Clicked item index
                 int itemPosition     = position;
 
@@ -63,7 +67,12 @@ public class GroupListActivity extends Activity {
                 Toast.makeText(getApplicationContext(),
                         "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
                         .show();
+*/
 
+                String itemValue = (String) listView.getItemAtPosition(position);
+
+                Intent intent = new Intent(GroupListActivity.this, GroupActivity.class);
+                startActivity(intent);
             }
 
         });
@@ -86,6 +95,14 @@ public class GroupListActivity extends Activity {
             case R.id.action_settings:
                 return true;
             case R.id.action_add_group:
+
+                DialogFragment dialog = new NewGroupFragment();
+                dialog.show(getFragmentManager(), GroupListActivity.class.toString());
+
+                return true;
+            case R.id.addphoto:
+                Intent intent = new Intent(this, ImportImageActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

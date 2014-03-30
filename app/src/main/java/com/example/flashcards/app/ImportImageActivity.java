@@ -60,7 +60,7 @@ public class ImportImageActivity extends ActionBarActivity {
                 }
             }
         });
-
+/*
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +76,7 @@ public class ImportImageActivity extends ActionBarActivity {
                 }
             }
         });
-
+*/
 
     }
 
@@ -85,34 +85,64 @@ public class ImportImageActivity extends ActionBarActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             galleryAddPic();
 
+            Log.i(ImportImageActivity.class.toString(), "data.getData(): " + data.getData());
+
             Log.i(ImportImageActivity.class.toString(), "Photo path: " + mCurrentPhotoPath);
             // TODO: save mCurrentPhotoPath
 
             previewImage();
         }
+        /*
         else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
-            mCurrentPhotoPath = convertMediaUriToPath(data.getData());
+            mCurrentPhotoPath = getPath(data.getData());
 
+            data.getExtras().
             Log.i(ImportImageActivity.class.toString(), "Photo path: " + mCurrentPhotoPath);
             // TODO: save mCurrentPhotoPath
 
             previewImage();
         }
+        */
     }
-
-    protected String convertMediaUriToPath(Uri uri) {
-        String[] proj={MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, proj,  null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String path = cursor.getString(column_index);
-        cursor.close();
-        return path;
+/*
+    public String getPath(Uri uri) {
+        // just some safety built in
+        if( uri == null ) {
+            // TODO perform some logging or show user feedback
+            return null;
+        }
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        // this is our fallback here
+        return uri.getPath();
     }
-
+*/
     private void previewImage() {
         Bitmap b = BitmapFactory.decodeFile(mCurrentPhotoPath);
+        // mImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
+
+
+        System.out.println("hi");
+
         mImageView.setImageBitmap(b);
+        mImageView.setVisibility(View.VISIBLE);
+/*
+        mImageView = new ImageView(this);
+        mImageView.setImageBitmap(b);
+        mImageView.setVisibility(View.VISIBLE);
+
+
+        addView(mImageView);
+*/
+
     }
 
     private File createImageFile() throws IOException {
