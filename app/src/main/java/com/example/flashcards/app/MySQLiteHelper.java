@@ -10,9 +10,6 @@ import android.app.*;
 import java.util.List;
 import java.util.ArrayList;
 
-/**
- * Created by Ezzy on 3/29/14.
- */
 public class MySQLiteHelper extends SQLiteOpenHelper{
     // Database Version
     private static final int DATABASE_VERSION = 1;
