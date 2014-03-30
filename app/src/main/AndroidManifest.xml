@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flashcards.app" >
+    package="com.example.flashcards.app"
+    android:versionCode="1"
+    android:versionName="0.1" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" >
+    </uses-sdk>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +35,21 @@
         <activity
             android:name="com.example.flashcards.app.LoadGroupList"
             android:label="@string/title_activity_load_group_list" >
+        </activity>
+        <activity
+            android:name="com.example.flashcards.app.ImportImageActivity"
+            android:label="@string/title_activity_import_image"
+            android:parentActivityName=".AddNotecardActivity" >
+        </activity>
+        <activity
+            android:name="com.example.flashcards.app.AddNotecardActivity"
+            android:label="@string/title_activity_add_notecard"
+            android:parentActivityName=".GroupActivity">
+        </activity>
+        <activity
+            android:name="com.example.flashcards.app.GroupActivity"
+            android:label="@string/title_activity_group"
+            android:parentActivityName=".GroupListActivity" >
         </activity>
     </application>
 

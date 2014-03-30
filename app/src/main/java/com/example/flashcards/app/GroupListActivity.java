@@ -1,7 +1,12 @@
 package com.example.flashcards.app;
 
+import android.view.Menu;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,9 +22,14 @@ import android.widget.ListView;
 import android.widget.*;
 import android.widget.ArrayAdapter;
 import java.util.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.support.v7.app.ActionBar;
 
-
-public class GroupListActivity extends ActionBarActivity {
+public class GroupListActivity extends Activity{
+    ListView listView ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +54,11 @@ public class GroupListActivity extends ActionBarActivity {
         myStringArray1.add("something");
         ListAdapter myListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, db.getCategories(1, getApplicationContext()));
         myListView.setAdapter(myListAdapter);
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.group_list, menu);
         return true;
@@ -61,11 +69,21 @@ public class GroupListActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_add_group:
 
+                DialogFragment dialog = new NewGroupFragment();
+                dialog.show(getFragmentManager(), GroupListActivity.class.toString());
+
+                return true;
+            case R.id.addphoto:
+                Intent intent = new Intent(this, ImportImageActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
