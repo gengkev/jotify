@@ -33,10 +33,6 @@
             android:label="@string/title_activity_group_list" >
         </activity>
         <activity
-            android:name="com.example.flashcards.app.LoadGroupList"
-            android:label="@string/title_activity_load_group_list" >
-        </activity>
-        <activity
             android:name="com.example.flashcards.app.ImportImageActivity"
             android:label="@string/title_activity_import_image"
             android:parentActivityName="com.example.flashcards.app.AddNotecardActivity" >
@@ -50,10 +46,6 @@
             android:name="com.example.flashcards.app.GroupActivity"
             android:label="@string/title_activity_group"
             android:parentActivityName="com.example.flashcards.app.GroupListActivity" >
-        </activity>
-        <activity
-            android:name="com.example.flashcards.app.TesterActivity"
-            android:label="@string/title_activity_tester" >
         </activity>
         <activity
             android:name="com.example.flashcards.app.TestingActivity"
