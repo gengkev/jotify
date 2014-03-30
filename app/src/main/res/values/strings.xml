@@ -2,8 +2,10 @@
 <resources>
 
     <string name="app_name">FlashCards</string>
+    <string name="app_name_internal">Flashcards</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="chooser_title">Choose image with</string>
     <string name="title_activity_group_list">GroupListActivity</string>
     <string name="title_activity_import_image">ImportImageActivity</string>
     <string name="title_activity_add_notecard">AddNotecardActivity</string>

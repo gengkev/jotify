@@ -1,15 +1,20 @@
 package com.example.flashcards.app;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +23,10 @@ import java.util.Date;
 
 public class ImportImageActivity extends ActionBarActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int PICK_IMAGE = 2;
 
     String mCurrentPhotoPath;
+    ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,8 @@ public class ImportImageActivity extends ActionBarActivity {
 
         Button camera = (Button) findViewById(R.id.btn_take_camera);
         Button gallery = (Button) findViewById(R.id.btn_select_gallery);
+
+        mImageView = (ImageView) findViewById(R.id.imagePreview);
 
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +50,7 @@ public class ImportImageActivity extends ActionBarActivity {
                         photoFile = createImageFile();
                     }
                     catch (IOException ex) {
-                        // error :(
+                        System.err.println(ex);
                     }
 
                     if (photoFile != null) {
@@ -52,15 +61,58 @@ public class ImportImageActivity extends ActionBarActivity {
             }
         });
 
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+
+                String title = getResources().getString(R.string.chooser_title);
+                Intent chooser = Intent.createChooser(intent, title);
+
+                if (chooser.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(chooser, PICK_IMAGE);
+                }
+            }
+        });
+
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
+            galleryAddPic();
 
+            Log.i(ImportImageActivity.class.toString(), "Photo path: " + mCurrentPhotoPath);
+            // TODO: save mCurrentPhotoPath
+
+            previewImage();
         }
+        else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+            mCurrentPhotoPath = convertMediaUriToPath(data.getData());
+
+            Log.i(ImportImageActivity.class.toString(), "Photo path: " + mCurrentPhotoPath);
+            // TODO: save mCurrentPhotoPath
+
+            previewImage();
+        }
+    }
+
+    protected String convertMediaUriToPath(Uri uri) {
+        String[] proj={MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, proj,  null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String path = cursor.getString(column_index);
+        cursor.close();
+        return path;
+    }
+
+    private void previewImage() {
+        Bitmap b = BitmapFactory.decodeFile(mCurrentPhotoPath);
+        mImageView.setImageBitmap(b);
     }
 
     private File createImageFile() throws IOException {
@@ -76,8 +128,16 @@ public class ImportImageActivity extends ActionBarActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
     @Override
