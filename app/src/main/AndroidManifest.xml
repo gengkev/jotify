@@ -10,7 +10,9 @@
     </uses-sdk>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.hardware.camera" android:required="true" />
+    <uses-permission
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -37,6 +39,10 @@
         <activity
             android:name="com.example.flashcards.app.AddNotecardActivity"
             android:label="@string/title_activity_add_notecard" >
+        </activity>
+        <activity
+            android:name="com.example.flashcards.app.GroupActivity"
+            android:label="@string/title_activity_group" >
         </activity>
     </application>
 

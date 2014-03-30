@@ -6,8 +6,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="chooser_title">Choose image with</string>
+    <string name="add_group">Add</string>
     <string name="title_activity_group_list">GroupListActivity</string>
     <string name="title_activity_import_image">ImportImageActivity</string>
     <string name="title_activity_add_notecard">AddNotecardActivity</string>
+    <string name="title_activity_group">GroupActivity</string>
 
 </resources>
