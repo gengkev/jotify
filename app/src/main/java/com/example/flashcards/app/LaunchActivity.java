@@ -4,6 +4,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.content.Intent;
+import android.widget.Button;
+import android.view.*;
 
 public class LaunchActivity extends ActionBarActivity {
 
@@ -21,12 +24,13 @@ public class LaunchActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.launch, menu);
         return true;
     }
-/*
+
+
     public void LaunchApp(View view){
         Intent intent = new Intent(LaunchActivity.this, GroupListActivity.class);
         LaunchActivity.this.startActivity(intent);
     }
-*/
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

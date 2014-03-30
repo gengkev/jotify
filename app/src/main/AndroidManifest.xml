@@ -20,6 +20,10 @@
             android:name="com.example.flashcards.app.GroupListActivity"
             android:label="@string/title_activity_group_list" >
         </activity>
+        <activity
+            android:name="com.example.flashcards.app.LoadGroupList"
+            android:label="@string/title_activity_load_group_list" >
+        </activity>
     </application>
 
 </manifest>
