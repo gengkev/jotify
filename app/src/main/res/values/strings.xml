@@ -7,5 +7,6 @@
     <string name="title_activity_group_list">GroupListActivity</string>
     <string name="title_activity_import_image">ImportImageActivity</string>
     <string name="title_activity_add_notecard">AddNotecardActivity</string>
+    <string name="title_activity_group">GroupActivity</string>
 
 </resources>
