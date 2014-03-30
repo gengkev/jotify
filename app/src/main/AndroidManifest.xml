@@ -34,15 +34,18 @@
         </activity>
         <activity
             android:name="com.example.flashcards.app.ImportImageActivity"
-            android:label="@string/title_activity_import_image" >
+            android:label="@string/title_activity_import_image"
+            android:parentActivityName=".AddNotecardActivity" >
         </activity>
         <activity
             android:name="com.example.flashcards.app.AddNotecardActivity"
-            android:label="@string/title_activity_add_notecard" >
+            android:label="@string/title_activity_add_notecard"
+            android:parentActivityName=".GroupActivity">
         </activity>
         <activity
             android:name="com.example.flashcards.app.GroupActivity"
-            android:label="@string/title_activity_group" >
+            android:label="@string/title_activity_group"
+            android:parentActivityName=".GroupListActivity" >
         </activity>
     </application>
 

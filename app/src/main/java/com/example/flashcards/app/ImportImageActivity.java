@@ -1,15 +1,20 @@
 package com.example.flashcards.app;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +23,10 @@ import java.util.Date;
 
 public class ImportImageActivity extends ActionBarActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int PICK_IMAGE = 2;
 
     String mCurrentPhotoPath;
+    ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,8 @@ public class ImportImageActivity extends ActionBarActivity {
 
         Button camera = (Button) findViewById(R.id.btn_take_camera);
         Button gallery = (Button) findViewById(R.id.btn_select_gallery);
+
+        mImageView = (ImageView) findViewById(R.id.imagePreview);
 
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +50,7 @@ public class ImportImageActivity extends ActionBarActivity {
                         photoFile = createImageFile();
                     }
                     catch (IOException ex) {
-                        // error :(
+                        System.err.println(ex);
                     }
 
                     if (photoFile != null) {
@@ -51,16 +60,89 @@ public class ImportImageActivity extends ActionBarActivity {
                 }
             }
         });
+/*
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
 
+                String title = getResources().getString(R.string.chooser_title);
+                Intent chooser = Intent.createChooser(intent, title);
+
+                if (chooser.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(chooser, PICK_IMAGE);
+                }
+            }
+        });
+*/
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
+            galleryAddPic();
 
+            Log.i(ImportImageActivity.class.toString(), "data.getData(): " + data.getData());
+
+            Log.i(ImportImageActivity.class.toString(), "Photo path: " + mCurrentPhotoPath);
+            // TODO: save mCurrentPhotoPath
+
+            previewImage();
         }
+        /*
+        else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+            mCurrentPhotoPath = getPath(data.getData());
+
+            data.getExtras().
+            Log.i(ImportImageActivity.class.toString(), "Photo path: " + mCurrentPhotoPath);
+            // TODO: save mCurrentPhotoPath
+
+            previewImage();
+        }
+        */
+    }
+/*
+    public String getPath(Uri uri) {
+        // just some safety built in
+        if( uri == null ) {
+            // TODO perform some logging or show user feedback
+            return null;
+        }
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        // this is our fallback here
+        return uri.getPath();
+    }
+*/
+    private void previewImage() {
+        Bitmap b = BitmapFactory.decodeFile(mCurrentPhotoPath);
+        // mImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
+
+
+        System.out.println("hi");
+
+        mImageView.setImageBitmap(b);
+        mImageView.setVisibility(View.VISIBLE);
+/*
+        mImageView = new ImageView(this);
+        mImageView.setImageBitmap(b);
+        mImageView.setVisibility(View.VISIBLE);
+
+
+        addView(mImageView);
+*/
+
     }
 
     private File createImageFile() throws IOException {
@@ -76,8 +158,16 @@ public class ImportImageActivity extends ActionBarActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
     @Override
