@@ -30,6 +30,7 @@ import android.support.v7.app.ActionBar;
 
 public class GroupListActivity extends Activity{
     ListView listView ;
+    List<Category> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +50,16 @@ public class GroupListActivity extends Activity{
 
         //db.getCategories(1, getApplicationContext());
 
-        ListView myListView = (ListView) findViewById(R.id.GroupList);
-        ArrayList<String> myStringArray1 =  new ArrayList<String>();
-        myStringArray1.add("something");
-        ListAdapter myListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, db.getCategories(1, getApplicationContext()));
-        myListView.setAdapter(myListAdapter);
+        listView = (ListView) findViewById(R.id.GroupList);
+        categories = db.getCategories(getApplicationContext());
+
+        List<String> titles = new ArrayList<String>(categories.size());
+        for (Category c : categories) {
+            titles.add(c.title);
+        }
+
+        ListAdapter myListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, titles);
+        listView.setAdapter(myListAdapter);
     }
 
     @Override
