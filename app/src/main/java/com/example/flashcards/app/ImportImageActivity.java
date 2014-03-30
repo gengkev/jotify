@@ -1,5 +1,6 @@
 package com.example.flashcards.app;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +44,7 @@ public class ImportImageActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePictureIntent.setType("image/jpeg");
                 // Ensure that the intent can be handled
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     // get reference to file
@@ -126,6 +129,24 @@ public class ImportImageActivity extends ActionBarActivity {
     }
 */
     private void previewImage() {
+        Uri selectedImage = Uri.parse(mCurrentPhotoPath);
+        getContentResolver().notifyChange(selectedImage, null);
+        ContentResolver cr = getContentResolver();
+        Bitmap bitmap;
+        try {
+            bitmap = android.provider.MediaStore.Images.Media
+                    .getBitmap(cr, selectedImage);
+
+            mImageView.setImageBitmap(bitmap);
+            Toast.makeText(this, selectedImage.toString(),
+                    Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
+                    .show();
+            Log.e("Camera", e.toString());
+        }
+
+        /*
         Bitmap b = BitmapFactory.decodeFile(mCurrentPhotoPath);
         // mImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
 
@@ -151,11 +172,7 @@ public class ImportImageActivity extends ActionBarActivity {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+        File image = new File(storageDir, imageFileName + ".jpg");
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();

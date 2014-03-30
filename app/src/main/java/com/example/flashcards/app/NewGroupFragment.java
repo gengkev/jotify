@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 
 public class NewGroupFragment extends DialogFragment {
+    public final String EXTRA_NAME = "com.example.flashcards.app.NAME";
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
@@ -26,7 +28,7 @@ public class NewGroupFragment extends DialogFragment {
                         String value = text.getText().toString();
 
                         Intent intent = new Intent(getActivity(), GroupActivity.class);
-                        intent.putExtra("name", value);
+                        intent.putExtra(EXTRA_NAME, value);
                         startActivity(intent);
                     }
                 });

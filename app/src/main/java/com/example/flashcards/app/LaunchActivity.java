@@ -25,9 +25,9 @@ public class LaunchActivity extends ActionBarActivity {
         return true;
     }
 
-    public void LaunchApp(View view){
-        Intent intent = new Intent(LaunchActivity.this, GroupListActivity.class);
-        LaunchActivity.this.startActivity(intent);
+    public void launchApp(View view){
+        Intent intent = new Intent(this, GroupListActivity.class);
+        startActivity(intent);
     }
 
     @Override
