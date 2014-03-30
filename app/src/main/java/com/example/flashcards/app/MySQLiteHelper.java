@@ -1,5 +1,6 @@
 package com.example.flashcards.app;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -22,21 +23,32 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_NOTECARDS_TABLE = "CREATE TABLE notecard("
+                + "_id INTEGER PRIMARY KEY, "
+                + "path TEXT, "
+                + "category_id INTEGER, "
+                + "caption TEXT)";
+        db.execSQL(CREATE_NOTECARDS_TABLE);
+
+        String CREATE_CATEGORIES_TABLE = "CREATE TABLE category("
+                + "_id INTEGER PRIMARY KEY, "
+                + "title TEXT)";
+        db.execSQL(CREATE_CATEGORIES_TABLE);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS notecard");
+        db.execSQL("DROP TABLE IF EXISTS category");
         // create fresh books table
         this.onCreate(db);
     }
 
-    private static final String[] COLUMNS = {"_id","path","category_id","caption"};
+    private static final String[] NOTECARD_COLUMNS = {"_id","path","category_id","caption"};
+    private static final String[] CATEGORY_COLUMNS = {"_id", "title"};
 
-    String[] tableColumns = new String[] {
-            "caption" };
-    public String getNotecards(int id){
+    public List<Notecard> getNotecards(Context context){
 
         // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
@@ -55,22 +67,35 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
       /*  COLUMNS,
                 "_id = 1",
                 new String[] { String.valueOf(id) }, */
-        if (cursor != null)
-            cursor.moveToFirst();
 
-       return cursor.getString(1);
+        List<Notecard> notecards = new ArrayList<Notecard>();
 
-       // return "Hello";
+         if (cursor.moveToFirst()) {
+            do {
+                Notecard n = new Notecard();
+                n._id = cursor.getInt(0);
+                n.caption = cursor.getString(1);
+                n.category_id = cursor.getInt(2);
+                n.path = cursor.getString(3);
+
+                notecards.add(n);
+
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, n.toString(), duration);
+                toast.show();
+
+            } while(cursor.moveToNext());
+         }
+
+        return notecards;
+
+        // return "Hello";
     }
 
-    public List<String> getCategories(int id, Context context){
-
-        // 1. get reference to readable DB
+    public List<Category> getCategories(Context context){
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // 2. build query
         Cursor cursor =
-                db.query("notecard", // a. table
+                db.query("category", // a. table
                         null, // b. column names
                         null, // c. selections
                         null, // d. selections args
@@ -79,30 +104,57 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
                         null, // g. order by
                         null); // h. limit
 
-      /*  COLUMNS,
-                "_id = 1",
-                new String[] { String.valueOf(id) }, */
-        if (cursor != null)
-           cursor.moveToFirst();
+        List<Category> categories = new ArrayList<Category>();
 
-       // Context context = getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
+        if (cursor.moveToFirst()) {
+            do {
+                Category c = new Category();
+                c._id = cursor.getInt(0);
+                c.title = cursor.getString(1);
 
-        Toast toast = Toast.makeText(context, cursor.getString(4), duration);
-        toast.show();
+                categories.add(c);
 
-        List<String> categories = new ArrayList<String>();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, c.toString(), duration);
+                toast.show();
 
-        do{
-        categories.add(cursor.getString(4));
-        }while(cursor.moveToNext());
-
-
-
+            } while(cursor.moveToNext());
+        }
 
         return categories;
 
         // return "Hello";
+    }
+
+    public long addNotecard(Notecard notecard) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("_id", notecard._id);
+        values.put("path", notecard.path);
+        values.put("category_id", notecard.category_id);
+        values.put("caption", notecard.caption);
+
+        // Inserting Row
+        long id = db.insert("notecard", null, values);
+        db.close(); // Closing database connection
+
+        notecard._id = (int) id;
+        return id;
+    }
+
+    public long addCategory(Category category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("title", category.title);
+
+        // Inserting Row
+        long id = db.insert("category", null, values);
+        db.close(); // Closing database connection
+
+        category._id = (int) id;
+        return id;
     }
 
 

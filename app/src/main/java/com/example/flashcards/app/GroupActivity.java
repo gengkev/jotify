@@ -1,5 +1,6 @@
 package com.example.flashcards.app;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +12,9 @@ public class GroupActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+
+        Intent intent = getIntent();
+        int data = intent.getIntExtra(NewGroupFragment.EXTRA_ID, -1);
     }
 
 
