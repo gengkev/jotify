@@ -17,4 +17,8 @@
     <string name="title_activity_add_notecard">Add Notecard</string>
     <string name="title_activity_group">Untitled Group</string>
     <string name="new_group_title">New group</string>
+    <string name="title_activity_view_notecards">ViewNotecards</string>
+    <string name="title_activity_tester">TesterActivity</string>
+    <string name="title_activity_testing">TestingActivity</string>
+
 </resources>

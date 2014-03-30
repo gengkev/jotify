@@ -70,7 +70,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 
         // 2. build query
         Cursor cursor =
-                db.query("category", // a. table
+                db.query("notecard", // a. table
                         null, // b. column names
                         null, // c. selections
                         null, // d. selections args
@@ -83,17 +83,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
                 "_id = 1",
                 new String[] { String.valueOf(id) }, */
         if (cursor != null)
-            cursor.moveToFirst();
+           cursor.moveToFirst();
 
        // Context context = getApplicationContext();
         int duration = Toast.LENGTH_SHORT;
 
-        Toast toast = Toast.makeText(context, cursor.getString(1), duration);
+        Toast toast = Toast.makeText(context, cursor.getString(4), duration);
         toast.show();
 
         List<String> categories = new ArrayList<String>();
 
-        categories.add(cursor.getString(1));
+        do{
+        categories.add(cursor.getString(4));
+        }while(cursor.moveToNext());
 
 
 
