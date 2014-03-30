@@ -39,17 +39,25 @@
         <activity
             android:name="com.example.flashcards.app.ImportImageActivity"
             android:label="@string/title_activity_import_image"
-            android:parentActivityName=".AddNotecardActivity" >
+            android:parentActivityName="com.example.flashcards.app.AddNotecardActivity" >
         </activity>
         <activity
             android:name="com.example.flashcards.app.AddNotecardActivity"
             android:label="@string/title_activity_add_notecard"
-            android:parentActivityName=".GroupActivity">
+            android:parentActivityName="com.example.flashcards.app.GroupActivity" >
         </activity>
         <activity
             android:name="com.example.flashcards.app.GroupActivity"
             android:label="@string/title_activity_group"
-            android:parentActivityName=".GroupListActivity" >
+            android:parentActivityName="com.example.flashcards.app.GroupListActivity" >
+        </activity>
+        <activity
+            android:name="com.example.flashcards.app.TesterActivity"
+            android:label="@string/title_activity_tester" >
+        </activity>
+        <activity
+            android:name="com.example.flashcards.app.TestingActivity"
+            android:label="@string/title_activity_testing" >
         </activity>
     </application>
 
