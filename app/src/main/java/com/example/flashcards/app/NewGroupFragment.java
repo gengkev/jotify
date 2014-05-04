@@ -40,7 +40,7 @@ public class NewGroupFragment extends DialogFragment {
                 Log.i(NewGroupFragment.class.getName(), "new category: " + c);
 
                 Intent intent = new Intent(getActivity(), GroupActivity.class);
-                intent.putExtra(GroupListActivity.EXTRA_ID, c._id);
+                intent.putExtra(GroupListActivity.EXTRA_GROUP_ID, c._id);
                 startActivity(intent);
             }
         });

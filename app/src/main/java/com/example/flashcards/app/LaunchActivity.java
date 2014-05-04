@@ -16,7 +16,7 @@ public class LaunchActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         
@@ -24,18 +24,14 @@ public class LaunchActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.launch, menu);
         return true;
     }
+*/
 
-<<<<<<< HEAD
-    public void LaunchApp(View view){
-        Intent intent = new Intent(LaunchActivity.this, TestingActivity.class);
-        LaunchActivity.this.startActivity(intent);
-=======
     public void launchApp(View view){
         Intent intent = new Intent(this, GroupListActivity.class);
         startActivity(intent);
->>>>>>> b6d69355b4425f1bd308b442fa31decb09d0d5db
     }
 
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -47,6 +43,6 @@ public class LaunchActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+*/
 
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.util.Log;
 import android.widget.Toast;
 import android.content.Context;
 import android.app.*;
@@ -25,9 +26,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         String CREATE_NOTECARDS_TABLE = "CREATE TABLE notecard("
                 + "_id INTEGER PRIMARY KEY, "
-                + "path TEXT, "
                 + "category_id INTEGER, "
-                + "caption TEXT)";
+                + "caption TEXT, "
+                + "path1 TEXT, "
+                + "path2 TEXT)";
         db.execSQL(CREATE_NOTECARDS_TABLE);
 
         String CREATE_CATEGORIES_TABLE = "CREATE TABLE category("
@@ -45,8 +47,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         this.onCreate(db);
     }
 
-    private static final String[] NOTECARD_COLUMNS = {"_id","path","category_id","caption"};
-    private static final String[] CATEGORY_COLUMNS = {"_id", "title"};
+    //private static final String[] NOTECARD_COLUMNS = {"_id","path","category_id","caption"};
+    //private static final String[] CATEGORY_COLUMNS = {"_id", "title"};
 
     public List<Notecard> getNotecards(Context context, int category){
 
@@ -57,7 +59,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         Cursor cursor =
                 db.query("notecard", // a. table
                         null, // b. column names
-                        "_id=?", // c. selections
+                        "category_id=?", // c. selections
                         new String[] { String.valueOf(category) }, // d. selections args
                         null, // e. group by
                         null, // f. having
@@ -74,9 +76,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
             do {
                 Notecard n = new Notecard();
                 n._id = cursor.getInt(0);
-                n.caption = cursor.getString(1);
-                n.category_id = cursor.getInt(2);
-                n.path = cursor.getString(3);
+                n.category_id = cursor.getInt(1);
+                n.caption = cursor.getString(2);
+                n.path1 = cursor.getString(3);
+                n.path2 = cursor.getString(4);
 
                 notecards.add(n);
 
@@ -126,6 +129,28 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         // return "Hello";
     }
 
+    public Notecard getNotecard(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query("notecard", null, "_id=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Notecard n = new Notecard();
+            n._id = cursor.getInt(0);
+            n.category_id = cursor.getInt(1);
+            n.caption = cursor.getString(2);
+            n.path1 = cursor.getString(3);
+            n.path2 = cursor.getString(4);
+
+            return n;
+        }
+        else {
+            Log.e(MySQLiteHelper.class.getName(), "Notecard with id " + id + " not found" );
+            return null;
+        }
+    }
+
     public Category getCategory(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -145,10 +170,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("_id", notecard._id);
-        values.put("path", notecard.path);
-        values.put("category_id", notecard.category_id);
-        values.put("caption", notecard.caption);
+        values.put("category_id", s(notecard.category_id + ""));
+        values.put("caption", s(notecard.caption));
+        values.put("path1", s(notecard.path1));
+        values.put("path2", s(notecard.path2));
 
         // Inserting Row
         long id = db.insert("notecard", null, values);
@@ -158,19 +183,35 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         return id;
     }
 
+    public void editNotecard(Notecard notecard) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("category_id", s(notecard.category_id + ""));
+        values.put("caption", s(notecard.caption));
+        values.put("path1", s(notecard.path1));
+        values.put("path2", s(notecard.path2));
+
+        db.update("notecard", values, "_id = ?",
+                new String[] { notecard._id + "" });
+
+    }
+
     public long addCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("title", category.title);
+        values.put("title", s(category.title));
 
         // Inserting Row
-        long id = db.insert("category", null, values);
+        long id = db.insertOrThrow("category", null, values);
         db.close(); // Closing database connection
 
         category._id = (int) id;
         return id;
     }
 
-
+    private String s(String s) {
+        return (s == null || s.isEmpty() ? " " : s);
+    }
 }

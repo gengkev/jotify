@@ -1,8 +1,8 @@
 package com.example.flashcards.app;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupActivity extends ActionBarActivity {
-    public static final String EXTRA_GROUP_ID = "com.example.flashcards.app.GROUP_ID";
-
     private ListView listView;
     private Category c;
     private List<Notecard> notecards;
@@ -26,8 +24,13 @@ public class GroupActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
+        int data = -1;
         Intent intent = getIntent();
-        int data = intent.getIntExtra(GroupListActivity.EXTRA_ID, -1);
+        data = intent.getIntExtra(GroupListActivity.EXTRA_GROUP_ID, -1);
+
+        if (data == -1) {
+            throw new RuntimeException("couldnt find data :(");
+        }
 
         MySQLiteHelper db = new MySQLiteHelper(this);
         c = db.getCategory(data);
@@ -51,9 +54,10 @@ public class GroupActivity extends ActionBarActivity {
                 Notecard n = notecards.get(pos);
 
                 // TODO: implement TestingActivity
-                //Intent intent = new Intent(GroupActivity.this, TestingActivity.class);
-                //intent.putExtra(GroupListActivity.EXTRA_ID, n._id);
-                //startActivity(intent);
+                Intent intent = new Intent(GroupActivity.this, TestingActivity.class);
+                intent.putExtra(GroupListActivity.EXTRA_NOTECARD_ID, n._id);
+                intent.putExtra(GroupListActivity.EXTRA_GROUP_ID, c._id);
+                startActivity(intent);
             }
         });
     }
@@ -79,7 +83,7 @@ public class GroupActivity extends ActionBarActivity {
             case R.id.action_add_notecard:
 
                 Intent intent = new Intent(this, AddNotecardActivity.class);
-                intent.putExtra(GroupActivity.EXTRA_GROUP_ID, c._id);
+                intent.putExtra(GroupListActivity.EXTRA_GROUP_ID, c._id);
                 startActivity(intent);
 
                 return true;
@@ -88,4 +92,12 @@ public class GroupActivity extends ActionBarActivity {
         }
     }
 
+    /*
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt("category-id", c._id);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+    */
 }

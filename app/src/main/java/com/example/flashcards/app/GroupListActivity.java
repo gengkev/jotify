@@ -29,7 +29,8 @@ import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 
 public class GroupListActivity extends Activity{
-    public static final String EXTRA_ID = "com.example.flashcards.app.ID";
+    public static final String EXTRA_GROUP_ID = "com.example.flashcards.app.GROUP_ID";
+    public static final String EXTRA_NOTECARD_ID = "com.example.flashcards.app.NOTECARD_ID";
 
     ListView listView ;
     List<Category> categories;
@@ -69,7 +70,7 @@ public class GroupListActivity extends Activity{
                 Category c = categories.get(pos);
 
                 Intent intent = new Intent(GroupListActivity.this, GroupActivity.class);
-                intent.putExtra(EXTRA_ID, c._id);
+                intent.putExtra(EXTRA_GROUP_ID, c._id);
                 startActivity(intent);
             }
         });
@@ -96,10 +97,6 @@ public class GroupListActivity extends Activity{
                 DialogFragment dialog = new NewGroupFragment();
                 dialog.show(getFragmentManager(), GroupListActivity.class.toString());
 
-                return true;
-            case R.id.addphoto:
-                Intent intent = new Intent(this, ImportImageActivity.class);
-                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
