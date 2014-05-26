@@ -2,6 +2,7 @@ package com.example.flashcards.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +17,8 @@ import java.util.List;
 
 public class GroupActivity extends ActionBarActivity {
     private ListView listView;
-    private Category c;
+
+    private Category category;
     private List<Notecard> notecards;
 
     @Override
@@ -24,22 +26,37 @@ public class GroupActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        int data = -1;
-        Intent intent = getIntent();
-        data = intent.getIntExtra(GroupListActivity.EXTRA_GROUP_ID, -1);
-
-        if (data == -1) {
-            throw new RuntimeException("couldnt find data :(");
-        }
-
         MySQLiteHelper db = new MySQLiteHelper(this);
-        c = db.getCategory(data);
-        notecards = db.getNotecards(this, c._id);
-        getActionBar().setTitle(c.title);
-
-
         listView = (ListView) findViewById(R.id.listView);
 
+        // Get category ID
+        Intent intent = getIntent();
+        int data = intent.getIntExtra(GroupListActivity.EXTRA_GROUP_ID, -1);
+
+        // Try the Bundle
+        if (data == -1 && savedInstanceState != null) {
+            data = savedInstanceState.getInt("category-id", -1);
+        }
+
+        // Failed
+        if (data == -1) {
+            // Go back up to GroupListActivity
+            // http://stackoverflow.com/a/20306670/1435804
+            Intent up = new Intent(this, GroupListActivity.class);
+            up.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            NavUtils.navigateUpTo(this, up);
+            return;
+        }
+
+        // Load category and notecards from database
+        category = db.getCategory(data);
+        notecards = db.getNotecards(category._id);
+
+        // Set title
+        getActionBar().setTitle(category.title);
+
+
+        // Display notecards in listView via an ArrayAdapter
         List<String> titles = new ArrayList<String>(notecards.size());
         for (Notecard n : notecards) {
             titles.add(n.caption);
@@ -51,12 +68,11 @@ public class GroupActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                Notecard n = notecards.get(pos);
-
-                // TODO: implement TestingActivity
+                // Create a TestingActivity to display the notecard
+                Notecard notecard = notecards.get(pos);
                 Intent intent = new Intent(GroupActivity.this, TestingActivity.class);
-                intent.putExtra(GroupListActivity.EXTRA_NOTECARD_ID, n._id);
-                intent.putExtra(GroupListActivity.EXTRA_GROUP_ID, c._id);
+                intent.putExtra(GroupListActivity.EXTRA_NOTECARD_ID, notecard._id);
+                intent.putExtra(GroupListActivity.EXTRA_GROUP_ID, category._id);
                 startActivity(intent);
             }
         });
@@ -65,7 +81,6 @@ public class GroupActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.group, menu);
         return true;
@@ -80,24 +95,22 @@ public class GroupActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
+
             case R.id.action_add_notecard:
-
+                // Create an AddNotecardActivity to add a notecard
                 Intent intent = new Intent(this, AddNotecardActivity.class);
-                intent.putExtra(GroupListActivity.EXTRA_GROUP_ID, c._id);
+                intent.putExtra(GroupListActivity.EXTRA_GROUP_ID, category._id);
                 startActivity(intent);
-
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    /*
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putInt("category-id", c._id);
-
         super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("category-id", category._id);
     }
-    */
 }

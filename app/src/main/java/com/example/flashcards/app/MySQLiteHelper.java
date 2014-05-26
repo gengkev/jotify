@@ -2,20 +2,16 @@ package com.example.flashcards.app;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.Cursor;
 import android.util.Log;
-import android.widget.Toast;
-import android.content.Context;
-import android.app.*;
-import java.util.List;
-import java.util.ArrayList;
 
-public class MySQLiteHelper extends SQLiteOpenHelper{
-    // Database Version
+import java.util.ArrayList;
+import java.util.List;
+
+public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    // Database Name
     private static final String DATABASE_NAME = "database";
 
     public MySQLiteHelper(Context context) {
@@ -43,19 +39,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS notecard");
         db.execSQL("DROP TABLE IF EXISTS category");
-        // create fresh books table
+
+        // create fresh table
         this.onCreate(db);
     }
 
-    //private static final String[] NOTECARD_COLUMNS = {"_id","path","category_id","caption"};
-    //private static final String[] CATEGORY_COLUMNS = {"_id", "title"};
-
-    public List<Notecard> getNotecards(Context context, int category){
-
-        // 1. get reference to readable DB
+    public List<Notecard> getNotecards(int category) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // 2. build query
         Cursor cursor =
                 db.query("notecard", // a. table
                         null, // b. column names
@@ -66,13 +57,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
                         null, // g. order by
                         null); // h. limit
 
-      /*  COLUMNS,
-                "_id = 1",
-                new String[] { String.valueOf(id) }, */
-
         List<Notecard> notecards = new ArrayList<Notecard>();
 
-         if (cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             do {
                 Notecard n = new Notecard();
                 n._id = cursor.getInt(0);
@@ -83,19 +70,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 
                 notecards.add(n);
 
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, n.toString(), duration);
-                toast.show();
-
-            } while(cursor.moveToNext());
-         }
+            } while (cursor.moveToNext());
+        }
 
         return notecards;
-
-        // return "Hello";
     }
 
-    public List<Category> getCategories(Context context){
+    public List<Category> getCategories() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query("category", // a. table
@@ -117,16 +98,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
 
                 categories.add(c);
 
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, c.toString(), duration);
-                toast.show();
-
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         return categories;
-
-        // return "Hello";
     }
 
     public Notecard getNotecard(int id) {
@@ -144,9 +119,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
             n.path2 = cursor.getString(4);
 
             return n;
-        }
-        else {
-            Log.e(MySQLiteHelper.class.getName(), "Notecard with id " + id + " not found" );
+        } else {
+            Log.e(MySQLiteHelper.class.getName(), "Notecard with id " + id + " not found");
             return null;
         }
     }
@@ -193,7 +167,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper{
         values.put("path2", s(notecard.path2));
 
         db.update("notecard", values, "_id = ?",
-                new String[] { notecard._id + "" });
+                new String[] { String.valueOf(notecard._id) });
 
     }
 

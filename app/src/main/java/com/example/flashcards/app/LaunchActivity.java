@@ -1,13 +1,9 @@
 package com.example.flashcards.app;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.content.Intent;
-import android.widget.Button;
-import android.view.*;
+import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 
 public class LaunchActivity extends ActionBarActivity {
 
@@ -26,7 +22,7 @@ public class LaunchActivity extends ActionBarActivity {
     }
 */
 
-    public void launchApp(View view){
+    public void launchApp(View view) {
         Intent intent = new Intent(this, GroupListActivity.class);
         startActivity(intent);
     }

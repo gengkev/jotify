@@ -1,20 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.flashcards.app.GroupListActivity" >
+    tools:context="com.example.flashcards.app.GroupListActivity">
 
-    <item android:id="@+id/action_add_group"
+    <item
+        android:id="@+id/action_add_group"
         android:icon="@drawable/ic_action_new"
-        android:title="@string/add_group"
-        android:showAsAction="always" />
-<!--
-    <item android:id="@+id/addphoto"
-        android:title="Add photo (TESTING)"
-        android:showAsAction="never" />
-
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
--->
+        android:showAsAction="always"
+        android:title="@string/add_group" />
+    <!--
+        <item android:id="@+id/action_settings"
+            android:title="@string/action_settings"
+            android:orderInCategory="100"
+            app:showAsAction="never" />
+    -->
 </menu>

@@ -1,14 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.flashcards.app.TestingActivity" >
+    tools:context="com.example.flashcards.app.TestingActivity">
 
-    <item android:id="@+id/edit_notecard"
+    <item
+        android:id="@+id/edit_notecard"
         android:icon="@drawable/ic_action_edit"
-        android:title="@string/edit_notecard"
-        android:showAsAction="always|withText" />
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/edit_notecard" />
 
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item
+        android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:showAsAction="never"
+        android:title="@string/action_settings" />
 </menu>

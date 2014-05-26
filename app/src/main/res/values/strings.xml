@@ -2,10 +2,11 @@
 <resources>
 
     <string name="app_name">Jotify</string>
-    <string name="app_name_internal">Flashcards</string>
+    <string name="welcomeButton">GO!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_load_group_list">Load</string>
     <string name="chooser_title">Choose image with</string>
+    <string name="chooser_camera">Take from Camera</string>
+    <string name="chooser_gallery">Pick from Gallery</string>
     <string name="add_group">Add group</string>
     <string name="done">Done</string>
     <string name="name">Name</string>
@@ -19,5 +20,6 @@
     <string name="title_activity_testing">Untitled Notecard</string>
     <string name="new_group_title">New group</string>
     <string name="edit_notecard">Edit</string>
+    <string name="notecard_saved">Notecard saved</string>
 
 </resources>

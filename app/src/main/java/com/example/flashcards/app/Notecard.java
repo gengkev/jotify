@@ -9,6 +9,6 @@ public class Notecard {
 
     public String toString() {
         return "_id (" + _id + "), category_id (" + category_id + "), caption (" + caption + "), "
-            + "path1 (" + path1 + "), path2 (" + path2 + ")";
+                + "path1 (" + path1 + "), path2 (" + path2 + ")";
     }
 }
