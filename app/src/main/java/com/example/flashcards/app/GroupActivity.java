@@ -93,6 +93,13 @@ public class GroupActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         switch (item.getItemId()) {
+            case android.R.id.home:
+                // http://stackoverflow.com/a/20306670/1435804
+                Intent up = NavUtils.getParentActivityIntent(this);
+                up.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                NavUtils.navigateUpTo(this, up);
+                return true;
+
             case R.id.action_settings:
                 return true;
 
