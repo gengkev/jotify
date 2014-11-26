@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flashcards.app"
-    android:versionCode="2"
-    android:versionName="0.2">
-
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="19"></uses-sdk>
+    package="com.example.flashcards.app">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission
@@ -30,22 +24,24 @@
 
         <activity
             android:name="com.example.flashcards.app.GroupListActivity"
-            android:label="@string/title_activity_group_list"></activity>
-
-        <activity
-            android:name="com.example.flashcards.app.AddNotecardActivity"
-            android:label="@string/title_activity_add_notecard"
-            android:parentActivityName="com.example.flashcards.app.GroupActivity"></activity>
+            android:label="@string/title_activity_group_list"
+            android:launchMode="singleTop" />
 
         <activity
             android:name="com.example.flashcards.app.GroupActivity"
             android:label="@string/title_activity_group"
-            android:parentActivityName="com.example.flashcards.app.GroupListActivity"></activity>
+            android:parentActivityName=".GroupListActivity"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name="com.example.flashcards.app.AddNotecardActivity"
+            android:label="@string/title_activity_add_notecard"
+            android:parentActivityName=".GroupActivity" />
 
         <activity
             android:name="com.example.flashcards.app.TestingActivity"
             android:label="@string/title_activity_testing"
-            android:parentActivityName="com.example.flashcards.app.GroupActivity"></activity>
+            android:parentActivityName=".GroupActivity" />
 
     </application>
 
