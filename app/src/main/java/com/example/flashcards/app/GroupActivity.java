@@ -68,9 +68,9 @@ public class GroupActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                // Create a TestingActivity to display the notecard
+                // Create a NotecardActivity to display the notecard
                 Notecard notecard = notecards.get(pos);
-                Intent intent = new Intent(GroupActivity.this, TestingActivity.class);
+                Intent intent = new Intent(GroupActivity.this, NotecardActivity.class);
                 intent.putExtra(GroupListActivity.EXTRA_NOTECARD_ID, notecard._id);
                 intent.putExtra(GroupListActivity.EXTRA_GROUP_ID, category._id);
                 startActivity(intent);

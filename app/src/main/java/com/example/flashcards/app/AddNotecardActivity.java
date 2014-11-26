@@ -241,7 +241,7 @@ public class AddNotecardActivity extends ActionBarActivity implements ImportImag
                 // Create a toast
                 Toast.makeText(this, R.string.notecard_saved, Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(this, TestingActivity.class);
+                Intent intent = new Intent(this, NotecardActivity.class);
                 intent.putExtra(GroupListActivity.EXTRA_NOTECARD_ID, notecard._id);
                 startActivity(intent);
                 return true;

@@ -39,7 +39,7 @@
             android:parentActivityName=".GroupActivity" />
 
         <activity
-            android:name="com.example.flashcards.app.TestingActivity"
+            android:name=".NotecardActivity"
             android:label="@string/title_activity_testing"
             android:parentActivityName=".GroupActivity" />
 

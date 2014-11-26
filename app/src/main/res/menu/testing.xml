@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.flashcards.app.TestingActivity">
+    tools:context="com.example.flashcards.app.NotecardActivity">
 
     <item
         android:id="@+id/edit_notecard"

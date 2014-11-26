@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 
 import java.io.IOException;
 
-public class TestingActivity extends Activity {
+public class NotecardActivity extends Activity {
     private LinearLayout mainLayout;
 
     private Notecard notecard;
@@ -77,7 +77,7 @@ public class TestingActivity extends Activity {
                 side2 = decodeSampledBitmapFromUri(Uri.parse(notecard.path2), 1000);
             }
         } catch (Exception e) {
-            Log.e(TestingActivity.class.getName(), e.toString());
+            Log.e(NotecardActivity.class.getName(), e.toString());
         }
 
         // Create ImageView
